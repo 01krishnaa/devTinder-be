@@ -4,6 +4,7 @@ const { dbConnect } = require("./src/config/db");
 const dotenv = require("dotenv");
 const authRouter = require("./src/routes/auth");
 const profileRouter = require("./src/routes/profile");
+const connectionRequestRouter = require("./src/routes/request");
 dotenv.config();
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(cookieParser());
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
+app.use("/", connectionRequestRouter);
 
 app.get("/", (req, res) => {
   res.json({ msg: "hi" });
