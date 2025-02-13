@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const authRouter = require("./src/routes/auth");
 const profileRouter = require("./src/routes/profile");
 const connectionRequestRouter = require("./src/routes/request");
+const userRouter = require("./src/routes/user");
 dotenv.config();
 
 const app = express();
@@ -16,10 +17,7 @@ app.use(cookieParser());
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", connectionRequestRouter);
-
-app.get("/", (req, res) => {
-  res.json({ msg: "hi" });
-});
+app.use("/", userRouter);
 
 dbConnect().then(() =>
   app.listen(PORT, () => {

@@ -39,27 +39,32 @@ router.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
   }
 });
 
-router.post("/request/review/:status/:requestId",userAuth, async (req, res) => {
-  try {
-    const user = req.user;
-    const { status, requestId } = req.params;
-    const ALLOWED_STATUS = ["accepted", "rejected"];
-    if (!ALLOWED_STATUS.includes(status)) throw new Error("Wrong status !!");
+router.post(
+  "/request/review/:status/:requestId",
+  userAuth,
+  async (req, res) => {
+    try {
+      const user = req.user;
+      const { status, requestId } = req.params;
+      const ALLOWED_STATUS = ["accepted", "rejected"];
+      if (!ALLOWED_STATUS.includes(status)) throw new Error("Wrong status !!");
 
-    const connectionRequest = await Request.findOne({
-      fromUserId: requestId,
-      toUserId: user._id,
-      status: "interested",
-    });
+      const connectionRequest = await Request.findOne({
+        fromUserId: requestId,
+        toUserId: user._id,
+        status: "interested",
+      });
 
-    if (!connectionRequest) throw new Error("Can not find connection request");
+      if (!connectionRequest)
+        throw new Error("Can not find connection request");
 
-    connectionRequest.status = status;
-    const data = await connectionRequest.save();
+      connectionRequest.status = status;
+      const data = await connectionRequest.save();
 
-    res.status(200).json({ message: "request " + status, data });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+      res.status(200).json({ message: "request " + status, data });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
   }
-});
+);
 module.exports = router;
